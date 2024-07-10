@@ -45,7 +45,7 @@ Pada bagian ini `cv2.cvtColor` mengonversi gambar dari format BGR (Blue-Green-Re
 
 #### 4). Deteksi tepi menggunakan Canny Edge Detection
 ```
-edges = cv2.Canny(gray_image, 50, 150)
+edges = cv2.Canny(gray_image, 40, 80)
 ```
 #### Penjelasan:
 Pada bagian ini `cv2.Canny` digunakan untuk deteksi tepi pada gambar. Parameter pertama adalah gambar input, parameter kedua dan ketiga adalah nilai ambang bawah dan atas untuk deteksi tepi. Nilai-nilai ini dapat disesuaikan sesuai dengan kebutuhan.
@@ -54,51 +54,46 @@ Pada bagian ini `cv2.Canny` digunakan untuk deteksi tepi pada gambar. Parameter 
 #### 5). Deteksi kontur
 ```
 contours, _ = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-contour_image = image.copy()
+contour_image = cv2.cvtColor(gray_image, cv2.COLOR_GRAY2BGR)
 cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)
 ```
 #### Penjelasan:
-Pada bagian ini `cv2.findContours` digunakan untuk mendeteksi kontur pada gambar. Parameter pertama adalah gambar tepi yang dihasilkan oleh `cv2.Canny`, parameter kedua adalah mode pengambilan kontur (`cv2.RETR_TREE` digunakan untuk mengambil semua kontur dan membangun hirarki lengkap), dan parameter ketiga adalah metode aproksimasi kontur (`cv2.CHAIN_APPROX_SIMPLE` menyimpan hanya titik-titik penting). kemdian cv2.drawContours digunakan untuk menggambar kontur yang ditemukan pada gambar asli. Parameter pertama adalah gambar tempat kontur akan digambar, parameter kedua adalah kontur yang akan digambar, parameter ketiga adalah indeks kontur yang akan digambar (-1 berarti semua kontur), parameter keempat adalah warna kontur (`0, 255, 0` untuk warna hijau), dan parameter kelima adalah ketebalan garis.
+Pada bagian ini proses deteksi kontur dilakukan dengan menggunakan `cv2.findContours` pada gambar tepi yang dihasilkan dari deteksi Canny. Fungsi ini mengembalikan daftar kontur yang ditemukan dalam gambar. Kontur ini kemudian digambar pada gambar yang telah dikonversi dari grayscale ke format BGR menggunakan `cv2.cvtColor`, sehingga memungkinkan pewarnaan kontur. Untuk menggambar kontur, digunakan `cv2.drawContours` dengan parameter gambar `(contour_image)`, daftar kontur `(contours)`, `-1` untuk menggambar semua kontur, warna hijau `(BGR: 0, 255, 0)`, dan ketebalan garis 2 piksel. Hasilnya adalah gambar grayscale dengan kontur berwarna hijau yang menunjukkan batas-batas objek yang terdeteksi.
 
 
 #### 6). Menampilkan Output 1
 ```
-plt.figure(figsize=(10, 5))
+fig, axs = plt.subplots(1, 2, figsize=(10, 5))
 
-plt.subplot(1, 2, 1)
-plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-plt.title('Original Image')
+axs[0].imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+axs[0].set_title('Original Image')
 
-plt.subplot(1, 2, 2)
-plt.imshow(edges, cmap='gray')
-plt.title('Canny Edge Detection')
+axs[1].imshow(edges, cmap='gray')
+axs[1].set_title('Canny Edge Detection')
 
 plt.show()
 ```
 #### Penjelasan:
-Pada bagian output 1, kita membuat sebuah figure dengan ukuran 10x5 inci untuk menampilkan dua subplot yang berisi gambar asli dan hasil deteksi tepi. Fungsi `plt.subplot(1, 2, 1)` digunakan untuk membuat subplot pertama dalam grid 1x2 (satu baris dan dua kolom). Pada subplot ini, kita menampilkan gambar asli yang telah dikonversi dari format BGR ke RGB menggunakan `cv2`.`cvtColor` agar dapat ditampilkan dengan benar oleh matplotlib. Gambar asli ini diberi judul "Original Image". Selanjutnya subplot kedua dibuat dengan `plt.subplot(1, 2, 2)`, di mana kita menampilkan gambar hasil deteksi tepi yang diperoleh dari algoritma Canny. Gambar ini diberi judul "Canny Edge Detection". dan kita menggunakan `plt.show()` untuk menampilkan kedua subplot dalam figure pertama.
+Pada bagian output 1 kita membuat visualisasi menggunakan Matplotlib untuk menampilkan dua hasil berbeda dari pemrosesan gambar. Dengan menggunakan `plt.subplots(1, 2, figsize=(10, 5))`, kita membuat sebuah figure dengan dua subplot yang disusun dalam satu baris dan dua kolom, serta ukuran keseluruhan gambar yang diatur menjadi 10x5 inci. Subplot pertama `(axs[0])` menampilkan gambar asli yang diambil dari file dan dikonversi dari format BGR (yang digunakan oleh OpenCV) ke format RGB (yang digunakan oleh Matplotlib) dengan `cv2.cvtColor(image, cv2.COLOR_BGR2RGB)`. Judul "Original Image" ditambahkan ke subplot ini menggunakan `set_title`. Subplot kedua (`axs[1]`) menampilkan hasil dari deteksi tepi menggunakan algoritma Canny yang dikonversi ke skala abu-abu dengan cmap='gray'. Judul "Canny Edge Detection" juga ditambahkan menggunakan `set_title`. Setelah kedua subplot diatur `plt.show()` digunakan untuk menampilkan figure ini.
 
 
 #### 7). Menampilkan Output 2
 ```
-plt.figure(figsize=(15, 5))
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
-plt.subplot(1, 3, 1)
-plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-plt.title('Original Image')
+axs[0].imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+axs[0].set_title('Original Image')
 
-plt.subplot(1, 3, 2)
-plt.imshow(edges, cmap='gray')
-plt.title('Canny Edge Detection')
+axs[1].imshow(edges, cmap='gray')
+axs[1].set_title('Canny Edge Detection')
 
-plt.subplot(1, 3, 3)
-plt.imshow(cv2.cvtColor(contour_image, cv2.COLOR_BGR2RGB))
-plt.title('Contours Detection')
+axs[2].imshow(cv2.cvtColor(contour_image, cv2.COLOR_BGR2RGB))
+axs[2].set_title('Contours Detection')
 
 plt.show()
 ```
 #### Penjelasan:
-Pada bagian output 2 kita membuat figure kedua dengan ukuran 15x5 inci untuk menampilkan tiga subplot yang berisi gambar asli, hasil deteksi tepi, dan hasil deteksi kontur. Fungsi `plt.subplot(1, 3, 1)` digunakan untuk membuat subplot pertama dalam grid 1x3 (satu baris dan tiga kolom), di mana kita menampilkan gambar asli yang dikonversi ke format RGB dengan `cv2.cvtColor`. Gambar asli ini diberi judul "Original Image" dan sumbu-sumbunya dihilangkan. Subplot kedua dibuat dengan `plt.subplot(1, 3, 2)`, di mana kita menampilkan gambar hasil deteksi tepi yang diberi judul "Canny Edge Detection" dan sumbu-sumbunya juga dihilangkan. Subplot ketiga dibuat dengan `plt.subplot(1, 3, 3)`, di mana kita menampilkan gambar hasil deteksi kontur yang ditambahkan ke gambar asli menggunakan `cv2.drawContours`. Gambar ini dikonversi ke format RGB sebelum ditampilkan dan diberi judul "Contours Detection, serta kita menggunakan `plt.show()` untuk menampilkan ketiga subplot dalam figure kedua. 
+Pada bagian output 2 kita melakukan proses serupa untuk membuat visualisasi dengan tiga hasil pemrosesan gambar. Dengan `plt.subplots(1, 3, figsize=(15, 5))` kita membuat sebuah figure dengan tiga subplot yang disusun dalam satu baris dan tiga kolom, dengan ukuran keseluruhan gambar 15x5 inci. Subplot pertama `(axs[0])` kembali menampilkan gambar asli dalam format RGB dengan judul "Original Image". Subplot kedua `(axs[1])` menampilkan hasil deteksi tepi dalam skala abu-abu dengan judul "Canny Edge Detection". Subplot ketiga `(axs[2])` menampilkan gambar dengan kontur yang terdeteksi. Gambar ini dihasilkan dengan menggambar kontur pada gambar grayscale yang telah dikonversi kembali ke format BGR, sehingga garis kontur dapat diberi warna hijau. Judul "Contours Detection" ditambahkan ke subplot ini untuk memberikan konteks visual. Setelah semua subplot diatur, `plt.show()` digunakan untuk menampilkan figure dengan ketiga subplot ini.
 
 
 
