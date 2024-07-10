@@ -45,10 +45,13 @@ Pada bagian ini `cv2.cvtColor` mengonversi gambar dari format BGR (Blue-Green-Re
 
 #### 4). Deteksi tepi menggunakan Canny Edge Detection
 ```
-edges = cv2.Canny(gray_image, 40, 80)
+edges = cv2.Canny(gray_image, 50, 80)
 ```
 #### Penjelasan:
-Pada bagian ini `cv2.Canny` digunakan untuk deteksi tepi pada gambar. Parameter pertama adalah gambar input, parameter kedua dan ketiga adalah nilai ambang bawah dan atas untuk deteksi tepi. Nilai-nilai ini dapat disesuaikan sesuai dengan kebutuhan.
+Pada bagian ini `cv2.Canny` digunakan untuk deteksi tepi pada gambar greyscale. Fungsi cv2.Canny menerima beberapa parameter:
+- `gray_image`: Gambar yang akan diproses, dalam format grayscale.
+- `50`: Ambang bawah untuk gradien intensitas, yang menentukan batas minimum untuk mendeteksi tepi. Piksel dengan nilai gradien di bawah ambang ini akan diabaikan.
+- `80`: Ambang atas untuk gradien intensitas. Piksel dengan nilai gradien di atas ambang ini akan dianggap sebagai tepi. Piksel dengan nilai gradien di antara ambang atas dan bawah akan dianggap sebagai tepi hanya jika terhubung dengan piksel yang sudah dianggap sebagai tepi.
 
 
 #### 5). Deteksi kontur
